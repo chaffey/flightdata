@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\FlightDataController;
 
 Route::get('/data/metar/{icao}', [FlightDataController::class, 'getMetar']);
 Route::get('/data/airport/{icao}', [FlightDataController::class, 'getAirport']);
+Route::get('/data/full/{icao}', [FlightDataController::class, 'getFullData']);
 Route::get('/debug', function () {
     return response()->json(['source' => 'api.php is working']);
 });

@@ -19,6 +19,10 @@ class FlightDataController extends Controller
             return $response->json();
         });
 
+        if(count($metar) == 0) {
+            return response()->json(['error' => 'ICAO not found'], 404);
+        }
+
         return response()->json($metar[0]);
     }
 
@@ -32,7 +36,24 @@ class FlightDataController extends Controller
             $response = Http::get($url);
             return $response->json();
         });
+        
+        if(count($airport) == 0) {
+            return response()->json(['error' => 'ICAO not found'], 404);
+        }
 
         return response()->json($airport[0]);
+    }
+
+    public function getFullData($icao)
+    {
+        $airport = $this->getAirport($icao)->getOriginalContent();
+
+        if (isset($airport['error'])) {
+            return response()->json(['error' => 'ICAO not found'], 404);
+        }
+
+        $airport['metar'] = $this->getMetar($icao)->getOriginalContent();
+
+        return response()->json($airport);
     }
 }
